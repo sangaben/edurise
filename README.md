@@ -1,6 +1,6 @@
 # EduRise 🌟
 
-![EduRise Banner](docs/banner.png)
+![EduRise Banner](banner.png)
 
 **EduRise** is a modern online educational platform designed to make learning accessible, engaging, and interactive. It empowers students and teachers by providing high-quality resources, analytics, and dynamic content delivery.
 
