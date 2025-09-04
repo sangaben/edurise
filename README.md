@@ -1,49 +1,39 @@
-# EduRise - Online Educational Platform
+# EduRise 🌟
 
-![EduRise Logo](docs/logo.png) <!-- optional, if you have a logo -->
+![EduRise Banner](docs/banner.png)
 
-## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Technologies](#technologies)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+**EduRise** is a modern online educational platform designed to make learning accessible, engaging, and interactive. It empowers students and teachers by providing high-quality resources, analytics, and dynamic content delivery.
 
 ---
 
-## Overview
-EduRise is an online educational platform designed to provide accessible, high-quality learning resources to students and teachers. The platform allows educators to upload videos, PDFs, and audio files, while students can stream or download content for self-paced learning.
+## 🚀 Features
 
-The system supports multiple user roles, including **students, teachers, and administrators**, and provides analytics for content engagement.
-
----
-
-## Features
-- **User Management**: Registration, login, and role-based access (Student, Teacher, Admin)
-- **Content Uploads**: Teachers can upload PDFs, videos, audio files, and images
-- **Dynamic Content Display**: Categorized learning resources with download and view tracking
-- **Advertisements**: Dynamic ad banners with analytics and countdown timers
-- **User Profiles**: Profile customization, bio, subject specialization, and profile pictures
-- **Analytics**: Track downloads, views, and ad interactions
-- **Responsive Design**: Mobile-friendly and modern interface
+| Feature | Description |
+|---------|-------------|
+| **User Roles** | Students, Teachers, Administrators with role-based access |
+| **Content Management** | Upload and manage PDFs, videos, audio, and images |
+| **Dynamic Resources** | Categorized learning materials with download & view tracking |
+| **Interactive Ads** | Professional advertisement banners with analytics & timers |
+| **Profile Customization** | User bios, subject specialization, profile pictures |
+| **Analytics** | Track downloads, views, and ad interactions |
+| **Responsive Design** | Mobile-friendly interface optimized for modern devices |
 
 ---
 
-## Technologies
-- **Backend**: Django, Python
-- **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite/PostgreSQL
-- **File Handling**: Django FileField & ImageField
-- **Version Control**: Git
+## 🛠️ Technologies Used
+
+- **Backend:** Django, Python  
+- **Frontend:** HTML, CSS, JavaScript  
+- **Database:** SQLite / PostgreSQL  
+- **Version Control:** Git & GitHub  
+- **Deployment:** Render / Any Cloud Hosting  
+- **Media Handling:** Django FileField & ImageField  
 
 ---
 
-## Installation
-1. Clone the repository:
+## ⚡ Getting Started
+
+### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/edurise.git
+git clone https://github.com/sangaben/edurise.git
 cd edurise
