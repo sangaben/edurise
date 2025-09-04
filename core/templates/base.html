@@ -1,0 +1,874 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EduRise - Empowering Ugandan youth through quality education and digital learning resources">
+    
+    <title>{% block title %}EduRise | Digital Learning Platform{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --dark: #212529;
+            --darker: #141414;
+            --light: #f8f9fa;
+            --gray-light: #e9ecef;
+            --gray: #6c757d;
+            --text: #495057;
+            --card-bg: #ffffff;
+            --footer-bg: #0d1117;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background-color: var(--light);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Header & Navigation */
+        .navbar {
+            padding: 1rem 0;
+            background: var(--card-bg) !important;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-scrolled {
+            padding: 0.6rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--primary) !important;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand img {
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-scrolled .navbar-brand img {
+            height: 38px;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.2rem;
+            color: var(--dark) !important;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+        
+        .nav-link:hover:after, .nav-link.active:after {
+            width: 80%;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary) !important;
+        }
+        
+        .navbar .btn {
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+        }
+        
+        .search-box {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--gray-light);
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+        
+        .search-box input {
+            border: none;
+            padding: 0.7rem 1.2rem;
+            background: transparent;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        .search-box button {
+            border: none;
+            padding: 0.7rem 1.2rem;
+            background: var(--gray-light);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box button:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Custom close button for mobile menu */
+        .navbar-toggler-close {
+            display: none;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            z-index: 1050;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .navbar-collapse.show ~ .navbar-toggler-close {
+            display: block;
+        }
+        
+        /* Top Announcement Bar */
+        .announcement-bar {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .announcement-bar:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20L0 20z' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+        
+        .announcement-bar a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        
+        /* Hero Section with multiple backgrounds */
+        .hero-section {
+            padding: 7rem 0 6rem;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.92) 0%, rgba(114, 9, 183, 0.88) 100%);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            transition: background-image 1s ease-in-out;
+        }
+        
+        .hero-bg-1 {
+            background-image: linear-gradient(135deg, rgba(67, 97, 238, 0.92) 0%, rgba(114, 9, 183, 0.88) 100%), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1800&q=80');
+        }
+        
+        .hero-bg-2 {
+            background-image: linear-gradient(135deg, rgba(67, 97, 238, 0.92) 0%, rgba(114, 9, 183, 0.88) 100%), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1800&q=80');
+        }
+        
+        .hero-bg-3 {
+            background-image: linear-gradient(135deg, rgba(67, 97, 238, 0.92) 0%, rgba(114, 9, 183, 0.88) 100%), url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1800&q=80');
+        }
+        
+        .hero-bg-4 {
+            background-image: linear-gradient(135deg, rgba(67, 97, 238, 0.92) 0%, rgba(114, 9, 183, 0.88) 100%), url('https://images.unsplash.com/photo-1524178232400-38d816f003ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1800&q=80');
+        }
+        
+        .hero-section:before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23f8f9fa' fill-opacity='1' d='M0,224L80,192C160,160,320,96,480,96C640,96,800,160,960,186.7C1120,213,1280,203,1360,197.3L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: cover;
+            background-position: bottom;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Secondary Navigation */
+        .secondary-nav {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 0.8rem 0;
+        }
+        
+        .secondary-nav .nav-link {
+            color: var(--gray) !important;
+            font-size: 0.95rem;
+            padding: 0.4rem 1rem !important;
+        }
+        
+        .secondary-nav .nav-link:hover {
+            color: var(--primary) !important;
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            background: var(--card-bg);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.35);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+        }
+        
+        .btn-outline-light:hover {
+            color: var(--primary);
+            background: var(--light);
+        }
+        
+        /* Feature Icons */
+        .feature-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            font-size: 2.2rem;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.05) rotate(5deg);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--footer-bg);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 0;
+        }
+        
+        .footer-links a:before {
+            content: '→';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 15px;
+        }
+        
+        .footer-links a:hover:before {
+            opacity: 1;
+            left: 0;
+        }
+        
+        .footer-social a {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            margin-right: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-social a:hover {
+            background: var(--primary);
+            transform: translateY(-5px) rotate(5deg);
+        }
+        
+        /* Stats Counter */
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Built by Sanga */
+        .built-by {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 0;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .built-by p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        .built-by a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .built-by a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navbar-nav {
+                padding: 1rem 0;
+            }
+            
+            .nav-link:after {
+                display: none;
+            }
+            
+            .hero-section {
+                padding: 5rem 0 4rem;
+                text-align: center;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .secondary-nav .nav {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+            
+            .secondary-nav .nav-link {
+                white-space: nowrap;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-box {
+                margin-top: 1rem;
+                width: 100%;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Announcement Bar -->
+    <div class="announcement-bar text-center">
+        <div class="container position-relative">
+            <p class="mb-0"><i class="fas fa-graduation-cap me-2"></i> New courses available! <a href="#" class="fw-bold">Check out our latest offerings</a></p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <img src="{% static 'images/edurise.png' %}" alt="EduRise Logo" height="85" class="me-2">
+                EduRise
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <button class="navbar-toggler-close" type="button" aria-label="Close navigation">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'upload' in request.path %}active{% endif %}" href="{% url 'upload' %}">
+                            <i class="fas fa-cloud-upload-alt me-1"></i> Upload
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'resources' in request.path %}active{% endif %}" href="{% url 'resources'%}">
+                            <i class="fas fa-book me-1"></i> Resources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'courses' %}">
+                            <i class="fas fa-graduation-cap me-1"></i> Courses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-briefcase me-1"></i> Opportunities
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            <i class="fas fa-users me-1"></i> About
+                        </a>
+                    </li>
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">
+                            <i class="fas fa-cog me-1"></i> Admin
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <!-- Search Bar -->
+                <form class="d-flex ms-3 me-4 search-box" role="search" action="{% url 'search' %}" method="get">
+                    <input class="form-control border-end-0" type="search" placeholder="Search courses..." aria-label="Search" name="q">
+                    <button class="btn" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'images/user-avatar.png' %}" alt="User" width="28" height="28" class="rounded-circle me-2">
+                            {{ user.username }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-bookmark me-2"></i>My Courses</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'home' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                        <a href="{% url 'register' %}" class="btn btn-primary">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Secondary Navigation -->
+    <div class="secondary-nav d-none d-lg-block">
+        <div class="container">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-laptop-code me-1"></i> Digital Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-chart-line me-1"></i> Business Training</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-seedling me-1"></i> Agriculture</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-heartbeat me-1"></i> Healthcare</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-hands-helping me-1"></i> Community Programs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-microphone me-1"></i> Youth Empowerment</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {% block content_wrapper %}
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    {% block breadcrumbs %}{% endblock %}
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+        
+        <!-- Hero Section (Example for home page) -->
+        {% if request.path == '/' %}
+        <section class="hero-section hero-bg-1">
+            <div class="container hero-content">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <span class="hero-badge"><i class="fas fa-rocket me-2"></i> Transforming Education in Uganda</span>
+                        <h1 class="display-3 fw-bold mb-4">Empowering Youth Through Digital Learning</h1>
+                        <p class="lead mb-4">Access quality educational resources, courses, and materials to enhance your knowledge and skills for a brighter future.</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="#" class="btn btn-light btn-lg px-4 py-2">Explore Courses</a>
+                            <a href="#" class="btn btn-outline-light btn-lg px-4 py-2">Become a Contributor</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 d-none d-lg-block">
+                        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGVkdWNhdGlvbiUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D" alt="Education Illustration" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Stats Section -->
+        <section class="py-5 bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="5000">0</div>
+                            <div class="stat-label">Active Students</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="250">0</div>
+                            <div class="stat-label">Courses</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="120">0</div>
+                            <div class="stat-label">Instructors</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="10000">0</div>
+                            <div class="stat-label">Resources</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold">Why Choose EduRise?</h2>
+                    <p class="lead text-muted">We provide the best digital learning experience for Ugandan students</p>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm feature-card">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <h5>Quality Resources</h5>
+                                <p class="text-muted">Access a wide range of educational materials curated by experts</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm feature-card">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <h5>Expert Instructors</h5>
+                                <p class="text-muted">Learn from qualified teachers and industry professionals</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm feature-card">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <h5>Mobile Access</h5>
+                                <p class="text-muted">Study anytime, anywhere with our mobile-friendly platform</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt-5 pb-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold mb-3 text-white">About EduRise</h5>
+                    <p class="text-light">Empowering Ugandan youth through digital education and accessible learning resources.</p>
+                    <div class="footer-social mt-3">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="fw-bold mb-3 text-white">Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'upload' %}">Upload</a></li>
+                        <li><a href="#">Resources</a></li>
+                        <li><a href="#">Courses</a></li>
+                        <li><a href="#">Opportunities</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="fw-bold mb-3 text-white">Contact Us</h5>
+                    <ul class="list-unstyled text-light">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Kampala, Uganda</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +256 700 123456</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@edurise.ug</li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="fw-bold mb-3 text-white">Newsletter</h5>
+                    <p class="text-light">Subscribe to our newsletter for updates on new courses and resources.</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email" aria-label="Your email" required>
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="my-4 bg-light opacity-50">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0 text-light">&copy; 2025 EduRise Uganda. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li class="list-inline-item mx-2 text-light">•</li>
+                        <li class="list-inline-item"><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
+                        <li class="list-inline-item mx-2 text-light">•</li>
+                        <li class="list-inline-item"><a href="#" class="text-light text-decoration-none">Accessibility</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="built-by">
+                <p>Built and powered by <a href="#" target="_blank">Sanga</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+        
+        // Close mobile menu when clicking on a nav link or close button
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            const navbarClose = document.querySelector('.navbar-toggler-close');
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            
+            // Close menu when clicking on nav links
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navbarCollapse.classList.contains('show')) {
+                        navbarToggler.click();
+                    }
+                });
+            });
+            
+            // Close menu when clicking on close button
+            if (navbarClose) {
+                navbarClose.addEventListener('click', () => {
+                    if (navbarCollapse.classList.contains('show')) {
+                        navbarToggler.click();
+                    }
+                });
+            }
+            
+            // Hero background rotation
+            const heroSection = document.querySelector('.hero-section');
+            const backgrounds = ['hero-bg-1', 'hero-bg-2', 'hero-bg-3', 'hero-bg-4'];
+            let currentBg = 0;
+            
+            if (heroSection && heroSection.classList.contains('hero-bg-1')) {
+                setInterval(() => {
+                    heroSection.classList.remove(backgrounds[currentBg]);
+                    currentBg = (currentBg + 1) % backgrounds.length;
+                    heroSection.classList.add(backgrounds[currentBg]);
+                }, 5000);
+            }
+            
+            // Animate stats counter
+            const statElements = document.querySelectorAll('.stat-number');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        const target = parseInt(element.getAttribute('data-count'));
+                        const duration = 2000;
+                        const step = target / (duration / 16);
+                        let current = 0;
+                        
+                        const timer = setInterval(() => {
+                            current += step;
+                            if (current >= target) {
+                                clearInterval(timer);
+                                element.textContent = target;
+                            } else {
+                                element.textContent = Math.round(current);
+                            }
+                        }, 16);
+                        
+                        observer.unobserve(element);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            statElements.forEach(stat => {
+                observer.observe(stat);
+            });
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

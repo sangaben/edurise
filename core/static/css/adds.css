@@ -1,0 +1,217 @@
+/* ads.css - Professional Advertisement Styles for EduRise */
+
+/* Advertisement Container */
+.ad-container {
+    margin: 2rem 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    background: linear-gradient(145deg, #ffffff, #f9f9f9);
+    position: relative;
+    border: 1px solid #e0e0e0;
+}
+
+.ad-container:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.15);
+}
+
+/* Banner Section */
+.ad-banner {
+    width: 100%;
+    max-height: 280px;
+    overflow: hidden;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+.ad-banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.ad-container:hover .ad-banner img {
+    transform: scale(1.05);
+}
+
+/* Text Section */
+.ad-text {
+    padding: 2rem 1.8rem;
+    background: white;
+}
+
+.ad-title {
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+    color: #1f2937; /* dark slate */
+    font-size: 1.4rem;
+    line-height: 1.3;
+}
+
+.ad-description {
+    color: #4b5563; /* gray-600 */
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Call-to-Action Button */
+.ad-cta {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+.ad-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transition: left 0.7s ease;
+}
+
+.ad-cta:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.ad-cta:hover::before {
+    left: 120%;
+}
+
+/* Close Button */
+.ad-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.ad-close:hover {
+    background: rgba(0, 0, 0, 0.85);
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* Counter Badge */
+.ad-counter {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    backdrop-filter: blur(4px);
+}
+
+/* Sidebar Ads */
+.sidebar-ad {
+    background: linear-gradient(145deg, #ffffff, #f7f7f7);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sidebar-ad:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+}
+
+.ad-label {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2563eb;
+    color: white;
+    padding: 0.35rem 1.3rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+.sidebar-ad .ad-banner {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.sidebar-ad .ad-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.sidebar-ad .ad-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.sidebar-ad .ad-cta {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Highlight Animation */
+@keyframes adPulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+.ad-highlight {
+    animation: adPulse 2s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .ad-text {
+        padding: 1.5rem 1rem;
+    }
+    
+    .ad-title {
+        font-size: 1.2rem;
+    }
+    
+    .ad-cta {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .ad-banner {
+        max-height: 220px;
+    }
+}

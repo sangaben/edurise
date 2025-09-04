@@ -1,0 +1,36 @@
+{% extends 'base.html' %}  <!-- Assuming you have a base template -->
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Search</h2>
+    
+    <!-- Search Form -->
+    <form method="get" action="{% url 'search' %}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" 
+                   name="q" value="{{ query }}" 
+                   placeholder="Search...">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <!-- Search Results -->
+    {% if query %}
+        <h4>Results for "{{ query }}"</h4>
+        
+        {% if results %}
+            <div class="list-group mt-3">
+                {% for item in results %}
+                    <a href="#" class="list-group-item list-group-item-action">
+                        {{ item.name }}  <!-- Adjust based on your model fields -->
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info mt-3">
+                No results found for "{{ query }}"
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

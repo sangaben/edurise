@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}EduRise | Logout{% endblock %}
+
+{% block extra_css %}
+<style>
+    .logout-hero {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.95) 0%, rgba(114, 9, 183, 0.9) 100%), url('{% static "images/logout-bg.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        padding: 5rem 0 3rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .logout-hero:before {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23f8f9fa' fill-opacity='1' d='M0,224L80,192C160,160,320,96,480,96C640,96,800,160,960,186.7C1120,213,1280,203,1360,197.3L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+        background-size: cover;
+        background-position: bottom;
+    }
+    
+    .logout-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 3rem;
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
+        text-align: center;
+    }
+    
+    .logout-icon {
+        font-size: 4rem;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+    }
+    
+    .logout-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    .btn-logout {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.25);
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-logout:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.35);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: var(--light);
+        color: var(--dark);
+        border: 1px solid var(--gray-light);
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-cancel:hover {
+        background: var(--gray-light);
+        color: var(--dark);
+    }
+    
+    .countdown {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin-top: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .logout-container {
+            margin-top: -30px;
+            padding: 2rem;
+        }
+        
+        .logout-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-logout, .btn-cancel {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Logout Hero Section -->
+<section class="logout-hero">
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-3">Leaving So Soon?</h1>
+                <p class="lead mb-4">We're sad to see you go, but we'll be here when you return!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Logout Container -->
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="logout-container">
+                <div class="logout-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                
+                <h2 class="mb-3">Ready to Log Out?</h2>
+                <p class="text-muted mb-4">
+                    Are you sure you want to log out of your EduRise account? 
+                    You'll need to sign in again to access your resources and profile.
+                </p>
+                
+                <div class="user-info mb-4 p-3 bg-light rounded">
+                    <p class="mb-1"><strong>Logged in as:</strong> {{ user.username }}</p>
+                    <p class="mb-0"><strong>Email:</strong> {{ user.email }}</p>
+                </div>
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <div class="logout-actions">
+                        <a href="{% url 'home' %}" class="btn-cancel">
+                            <i class="fas fa-arrow-left me-2"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn-logout">
+                            <i class="fas fa-sign-out-alt me-2"></i> Log Out
+                        </button>
+                    </div>
+                </form>
+
+                <div class="countdown" id="countdown">
+                    <!-- Countdown will be added by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h3 class="mb-4">Your EduRise Journey</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stat-item">
+                            <h4 class="text-primary">0</h4>
+                            <p>Resources Accessed</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item">
+                            <h4 class="text-primary">0</h4>
+                            <p>Days Active</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item">
+                            <h4 class="text-primary">0</h4>
+                            <p>Courses Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-redirect countdown
+        let countdown = 10;
+        const countdownElement = document.getElementById('countdown');
+        
+        if (countdownElement) {
+            const countdownInterval = setInterval(function() {
+                countdownElement.innerHTML = `You will be automatically logged out in ${countdown} seconds...`;
+                countdown--;
+                
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    // Auto-submit the form if user doesn't act
+                    document.querySelector('form[method="post"]').submit();
+                }
+            }, 1000);
+        }
+
+        // Prevent form resubmission
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,1019 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Learning Resources | EduRise Knowledge Hub{% endblock %}
+
+{% block extra_css %}
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #7c3aed;
+        --accent: #ec4899;
+        --dark: #1f2937;
+        --gray: #6b7280;
+        --gray-light: #f3f4f6;
+        --light: #f9fafb;
+    }
+    
+    body {
+        font-family: 'Inter', sans-serif;
+        color: var(--dark);
+    }
+    
+    h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+        font-family: 'Merriweather', serif;
+        font-weight: 700;
+    }
+    
+    .resources-hero {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(124, 58, 237, 0.85) 100%), url('{% static "images/resources-bg.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        padding: 5rem 0;
+        color: white;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .resources-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20L0 20z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.35rem;
+        margin-bottom: 2rem;
+        font-weight: 400;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .resource-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        background: white;
+    }
+    
+    .resource-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-thumbnail {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .card-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .resource-card:hover .card-thumbnail img {
+        transform: scale(1.08);
+    }
+    
+    .youtube-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: #ff0000;
+        color: white;
+        padding: 0.35rem 0.8rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    
+    .play-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.95);
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .resource-card:hover .play-icon {
+        opacity: 1;
+    }
+    
+    .play-icon i {
+        color: var(--primary);
+        font-size: 1.8rem;
+        margin-left: 4px;
+    }
+    
+    .resource-type-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 0.4rem 0.9rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        z-index: 2;
+    }
+    
+    .card-body {
+        padding: 1.8rem;
+    }
+    
+    .card-footer {
+        background: white;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.2rem 1.8rem;
+    }
+    
+    .stats-item {
+        display: flex;
+        align-items: center;
+        color: var(--gray);
+        font-size: 0.85rem;
+        margin-right: 1rem;
+    }
+    
+    .stats-item i {
+        margin-right: 0.4rem;
+        color: var(--primary);
+    }
+    
+    .btn-download, .btn-view {
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .btn-view {
+        background: var(--primary);
+        color: white;
+        border: none;
+    }
+    
+    .btn-view:hover {
+        background: var(--primary-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+        color: white;
+    }
+    
+    .btn-download {
+        background: white;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+    }
+    
+    .btn-download:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+    }
+    
+    .filter-section {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        margin-bottom: 2.5rem;
+    }
+    
+    .filter-title {
+        font-weight: 700;
+        margin-bottom: 1.2rem;
+        color: var(--dark);
+        font-size: 1.4rem;
+    }
+    
+    .filter-badge {
+        display: inline-block;
+        padding: 0.6rem 1.2rem;
+        background: var(--gray-light);
+        border-radius: 50px;
+        margin: 0 0.6rem 0.6rem 0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+    
+    .filter-badge:hover, .filter-badge.active {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    }
+    
+    .empty-state {
+        padding: 5rem 2rem;
+        text-align: center;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    }
+    
+    .empty-state-icon {
+        font-size: 5rem;
+        color: var(--gray-light);
+        margin-bottom: 2rem;
+    }
+    
+    .resource-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .category-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+        color: var(--primary);
+    }
+    
+    .resource-category {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        font-size: 0.95rem;
+        color: var(--primary);
+        font-weight: 600;
+    }
+    
+    .progress-ring {
+        position: relative;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .progress-ring circle {
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        fill: none;
+        stroke: var(--primary);
+        stroke-width: 3;
+        stroke-dasharray: 100;
+        stroke-dashoffset: 25;
+    }
+    
+    .download-progress {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        padding: 0.9rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        display: none;
+    }
+    
+    .resource-actions {
+        display: flex;
+        gap: 0.8rem;
+    }
+    
+    /* YouTube specific styles */
+    .youtube-thumbnail {
+        position: relative;
+        height: 100%;
+    }
+    
+    .youtube-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .youtube-duration {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    /* PDF specific styles */
+    .pdf-preview {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .pdf-icon {
+        font-size: 3.5rem;
+        color: #e74c3c;
+    }
+    
+    .pdf-pages {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    /* YouTube Modal */
+    .youtube-modal .modal-content {
+        border-radius: 16px;
+        overflow: hidden;
+        border: none;
+    }
+    
+    .youtube-modal .modal-header {
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        padding: 1rem 1.5rem;
+    }
+    
+    .youtube-modal .modal-body {
+        padding: 0;
+    }
+    
+    .youtube-modal iframe {
+        width: 100%;
+        height: 400px;
+        border: none;
+    }
+    
+    /* Loading animation */
+    @keyframes shimmer {
+        0% { background-position: -200px 0; }
+        100% { background-position: calc(200px + 100%) 0; }
+    }
+    
+    .shimmer {
+        animation: shimmer 1.5s infinite linear;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200px 100%;
+    }
+    
+    /* Search enhancements */
+    .search-container {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .search-container .form-control {
+        border-radius: 50px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+        border: 2px solid transparent;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-container .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 5px 20px rgba(37, 99, 235, 0.15);
+    }
+    
+    .search-container .btn {
+        border-radius: 50px;
+        padding: 0.8rem 1.8rem;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        font-weight: 600;
+    }
+    
+    /* Resource grid improvements */
+    .resources-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .resources-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<link rel="stylesheet" href="{% static 'css/adds.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="resources-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-10 mx-auto text-center">
+                <h1 class="hero-title">EduRise Knowledge Hub</h1>
+                <p class="hero-subtitle">Access our curated collection of educational materials, video tutorials, and resources to enhance your knowledge and skills</p>
+                
+                <div class="search-container">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search videos, PDFs, courses..." aria-label="Search resources" id="resourceSearch">
+                        <button class="btn btn-primary" type="button" id="searchButton">
+                            <i class="fas fa-search me-1"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <!-- Top Advertisement Banner -->
+    {% if ads.top_ad and ads.top_ad.is_active %}
+    <div class="ad-container" id="top-ad">
+        <div class="ad-banner">
+            {% if ads.top_ad.image %}
+            <img src="{{ ads.top_ad.image.url }}" alt="{{ ads.top_ad.title }}">
+            {% endif %}
+            <div class="ad-close">
+                <i class="fas fa-times"></i>
+            </div>
+            {% if ads.top_ad.show_timer %}
+            <div class="ad-counter" id="top-ad-counter"></div>
+            {% endif %}
+        </div>
+        <div class="ad-text">
+            <h3 class="ad-title">{{ ads.top_ad.title }}</h3>
+            <p class="ad-description">{{ ads.top_ad.description }}</p>
+            <a href="{{ ads.top_ad.target_url }}" class="ad-cta" target="_blank">{{ ads.top_ad.cta_text }}</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Filters Section -->
+    <div class="filter-section">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <h3 class="filter-title">Filter Resources</h3>
+            </div>
+            <div class="col-md-9">
+                <div class="d-flex flex-wrap">
+                    <span class="filter-badge active" data-filter="all">All Resources</span>
+                    <span class="filter-badge" data-filter="youtube">YouTube Videos</span>
+                    <span class="filter-badge" data-filter="video">Videos</span>
+                    <span class="filter-badge" data-filter="pdf">PDFs</span>
+                    <span class="filter-badge" data-filter="recent">Recent</span>
+                    <span class="filter-badge" data-filter="popular">Popular</span>
+                    <span class="filter-badge" data-filter="math">Mathematics</span>
+                    <span class="filter-badge" data-filter="science">Science</span>
+                    <span class="filter-badge" data-filter="language">Languages</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content Area -->
+        <div class="col-lg-9">
+            <!-- Resources Grid -->
+            <div id="resourcesContainer">
+                {% if contents %}
+                    <div class="resources-grid">
+                        {% for content in contents %}
+                            <div class="resource-item" data-type="{{ content.content_type }}" data-category="{{ content.category|default:'general' }}">
+                                <div class="resource-card">
+                                    <!-- Thumbnail Section -->
+                                    <div class="card-thumbnail">
+                                        {% if content.content_type == 'youtube' %}
+                                            <!-- YouTube Video Thumbnail -->
+                                            <div class="youtube-thumbnail">
+                                                <img src="https://img.youtube.com/vi/{{ content.youtube_id }}/maxresdefault.jpg" alt="{{ content.title }}" onerror="this.src='https://img.youtube.com/vi/{{ content.youtube_id }}/hqdefault.jpg'">
+                                                <div class="youtube-duration">{{ content.duration }}</div>
+                                                <div class="youtube-badge">
+                                                    <i class="fab fa-youtube"></i> YouTube
+                                                </div>
+                                                <div class="play-icon" data-youtube-id="{{ content.youtube_id }}">
+                                                    <i class="fas fa-play"></i>
+                                                </div>
+                                            </div>
+                                        {% elif content.content_type == 'video' %}
+                                            {% if content.cover_image %}
+                                                <img src="{{ content.cover_image.url }}" alt="{{ content.title }}">
+                                            {% else %}
+                                                <img src="{% static 'images/video-thumbnail.jpg' %}" alt="Video thumbnail">
+                                            {% endif %}
+                                            <div class="play-icon" data-video="{{ content.file.url }}">
+                                                <i class="fas fa-play"></i>
+                                            </div>
+                                        {% else %}
+                                            <div class="pdf-preview">
+                                                <div class="pdf-icon">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </div>
+                                                {% if content.pages %}
+                                                    <span class="pdf-pages">{{ content.pages }} pages</span>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <span class="resource-type-badge">
+                                            {{ content.content_type|upper }}
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        {% if content.category %}
+                                            <div class="resource-category">
+                                                <i class="fas fa-folder category-icon"></i>
+                                                {{ content.category }}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <h3 class="h5 card-title fw-bold text-dark">{{ content.title }}</h3>
+                                        
+                                        {% if content.description %}
+                                            <p class="card-text text-muted mb-3">{{ content.description|truncatewords:20 }}</p>
+                                        {% endif %}
+                                        
+                                        <div class="resource-meta">
+                                            <div class="stats-item">
+                                                <i class="far fa-clock"></i> {{ content.uploaded_at|timesince }} ago
+                                            </div>
+                                            {% if content.views %}
+                                            <div class="stats-item">
+                                                <i class="far fa-eye"></i> {{ content.views }} views
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Download progress (hidden by default) -->
+                                        <div class="download-progress" id="progress-{{ forloop.counter }}">
+                                            <div class="progress-ring me-2">
+                                                <svg width="40" height="40" viewBox="0 0 40 40">
+                                                    <circle r="18" cx="20" cy="20" />
+                                                </svg>
+                                            </div>
+                                            <span>Downloading...</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Card Footer -->
+                                    <div class="card-footer">
+                                        <div class="resource-actions">
+                                            {% if content.content_type == 'youtube' %}
+                                                <button class="btn btn-view watch-youtube-btn" data-youtube-id="{{ content.youtube_id }}">
+                                                    <i class="fab fa-youtube me-1"></i> Watch
+                                                </button>
+                                                <a href="https://www.youtube.com/watch?v={{ content.youtube_id }}" class="btn btn-download" target="_blank">
+                                                    <i class="fas fa-external-link-alt me-1"></i> YouTube
+                                                </a>
+                                            {% elif content.content_type == 'video' %}
+                                                <a href="{{ content.file.url }}" class="btn btn-view" target="_blank">
+                                                    <i class="fas fa-play-circle me-1"></i> Watch
+                                                </a>
+                                            {% else %}
+                                                <a href="{{ content.file.url }}" class="btn btn-view" target="_blank">
+                                                    <i class="fas fa-eye me-1"></i> Preview
+                                                </a>
+                                            {% endif %}
+                                            
+                                            {% if content.content_type != 'youtube' %}
+                                            <button class="btn btn-download download-btn" data-file="{{ content.file.url }}" data-resource="{{ content.title }}" data-id="{{ forloop.counter }}">
+                                                <i class="fas fa-download me-1"></i> Download
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Middle of content ad (after every 3rd item) -->
+                            {% if forloop.counter|divisibleby:3 and ads.mid_content_ad and ads.mid_content_ad.is_active %}
+                            <div class="col-12 mt-4 mb-4">
+                                <div class="ad-container" id="mid-content-ad-{{ forloop.counter }}">
+                                    <div class="ad-banner">
+                                        {% if ads.mid_content_ad.image %}
+                                        <img src="{{ ads.mid_content_ad.image.url }}" alt="{{ ads.mid_content_ad.title }}">
+                                        {% endif %}
+                                        <div class="ad-close">
+                                            <i class="fas fa-times"></i>
+                                        </div>
+                                        {% if ads.mid_content_ad.show_timer %}
+                                        <div class="ad-counter" id="mid-content-ad-{{ forloop.counter }}-counter"></div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="ad-text">
+                                        <h3 class="ad-title">{{ ads.mid_content_ad.title }}</h3>
+                                        <p class="ad-description">{{ ads.mid_content_ad.description }}</p>
+                                        <a href="{{ ads.mid_content_ad.target_url }}" class="ad-cta" target="_blank">{{ ads.mid_content_ad.cta_text }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Resource pagination" class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                {% else %}
+                    <!-- Empty State -->
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="text-dark mb-3">No Learning Resources Available</h3>
+                        <p class="text-muted mb-4">Our content library is currently being updated with valuable resources.</p>
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Home
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Sidebar with Ads -->
+        <div class="col-lg-3">
+            <!-- Sidebar Advertisement -->
+            {% if ads.sidebar_ad and ads.sidebar_ad.is_active %}
+            <div class="sidebar-ad" id="sidebar-ad">
+                <span class="ad-label">Sponsored</span>
+                <div class="ad-banner mb-3">
+                    {% if ads.sidebar_ad.image %}
+                    <img src="{{ ads.sidebar_ad.image.url }}" alt="{{ ads.sidebar_ad.title }}" class="rounded">
+                    {% endif %}
+                    <div class="ad-close">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <h4 class="ad-title">{{ ads.sidebar_ad.title }}</h4>
+                <p class="ad-description small">{{ ads.sidebar_ad.description }}</p>
+                <a href="{{ ads.sidebar_ad.target_url }}" class="ad-cta w-100 text-center" target="_blank">{{ ads.sidebar_ad.cta_text }}</a>
+            </div>
+            {% endif %}
+            
+            <!-- Additional sidebar content can go here -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Resource Categories</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Mathematics
+                            <span class="badge bg-primary rounded-pill">14</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Science
+                            <span class="badge bg-primary rounded-pill">22</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Languages
+                            <span class="badge bg-primary rounded-pill">17</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            History
+                            <span class="badge bg-primary rounded-pill">9</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- YouTube Channel Promotion -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fab fa-youtube fa-3x text-danger"></i>
+                    </div>
+                    <h5 class="card-title">Our YouTube Channel</h5>
+                    <p class="card-text">Subscribe to our channel for more educational content and tutorials.</p>
+                    <a href="https://www.youtube.com/@sangatechug" class="btn btn-danger w-100" target="_blank">
+                        <i class="fab fa-youtube me-2"></i> Subscribe Now
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Bottom sidebar ad -->
+            {% if ads.sidebar_bottom_ad and ads.sidebar_bottom_ad.is_active %}
+            <div class="sidebar-ad" id="sidebar-bottom-ad">
+                <span class="ad-label">Advertisement</span>
+                <div class="ad-banner mb-3">
+                    {% if ads.sidebar_bottom_ad.image %}
+                    <img src="{{ ads.sidebar_bottom_ad.image.url }}" alt="{{ ads.sidebar_bottom_ad.title }}" class="rounded">
+                    {% endif %}
+                    <div class="ad-close">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <h4 class="ad-title">{{ ads.sidebar_bottom_ad.title }}</h4>
+                <p class="ad-description small">{{ ads.sidebar_bottom_ad.description }}</p>
+                <a href="{{ ads.sidebar_bottom_ad.target_url }}" class="ad-cta w-100 text-center" target="_blank">{{ ads.sidebar_bottom_ad.cta_text }}</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Advertisement Banner -->
+{% if ads.bottom_ad and ads.bottom_ad.is_active %}
+<div class="container mb-5">
+    <div class="ad-container" id="bottom-ad">
+        <div class="ad-banner">
+            {% if ads.bottom_ad.image %}
+            <img src="{{ ads.bottom_ad.image.url }}" alt="{{ ads.bottom_ad.title }}">
+            {% endif %}
+            <div class="ad-close">
+                <i class="fas fa-times"></i>
+            </div>
+            {% if ads.bottom_ad.show_timer %}
+            <div class="ad-counter" id="bottom-ad-counter"></div>
+            {% endif %}
+        </div>
+        <div class="ad-text">
+            <h3 class="ad-title">{{ ads.bottom_ad.title }}</h3>
+            <p class="ad-description">{{ ads.bottom_ad.description }}</p>
+            <a href="{{ ads.bottom_ad.target_url }}" class="ad-cta" target="_blank">{{ ads.bottom_ad.cta_text }}</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- YouTube Modal -->
+<div class="modal fade youtube-modal" id="youtubeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="youtubeModalLabel">YouTube Video</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="youtubePlayer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">Video Player</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="ratio ratio-16x9">
+                    <video id="modalVideo" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter functionality
+        const filterBadges = document.querySelectorAll('.filter-badge');
+        const resourceItems = document.querySelectorAll('.resource-item');
+        const searchInput = document.getElementById('resourceSearch');
+        const searchButton = document.getElementById('searchButton');
+        
+        // Filter resources
+        filterBadges.forEach(badge => {
+            badge.addEventListener('click', function() {
+                // Remove active class from all badges
+                filterBadges.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked badge
+                this.classList.add('active');
+                
+                const filterValue = this.getAttribute('data-filter');
+                
+                // Filter resources
+                resourceItems.forEach(item => {
+                    if (filterValue === 'all') {
+                        item.style.display = 'block';
+                    } else {
+                        const itemType = item.getAttribute('data-type');
+                        const itemCategory = item.getAttribute('data-category');
+                        
+                        if (itemType === filterValue || itemCategory === filterValue) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Search functionality
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            resourceItems.forEach(item => {
+                const title = item.querySelector('.card-title').textContent.toLowerCase();
+                const description = item.querySelector('.card-text') ? 
+                    item.querySelector('.card-text').textContent.toLowerCase() : '';
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // YouTube video functionality
+        const youtubePlayIcons = document.querySelectorAll('.play-icon[data-youtube-id]');
+        const youtubeWatchButtons = document.querySelectorAll('.watch-youtube-btn');
+        const youtubeModal = new bootstrap.Modal(document.getElementById('youtubeModal'));
+        let youtubePlayer;
+        
+        // Initialize YouTube player when API is ready
+        function onYouTubeIframeAPIReady() {
+            youtubePlayer = new YT.Player('youtubePlayer', {
+                height: '400',
+                width: '100%',
+                playerVars: {
+                    'autoplay': 1,
+                    'rel': 0,
+                    'modestbranding': 1
+                }
+            });
+        }
+        
+        // Play YouTube video when play icon is clicked
+        youtubePlayIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const youtubeId = this.getAttribute('data-youtube-id');
+                playYouTubeVideo(youtubeId);
+            });
+        });
+        
+        // Play YouTube video when watch button is clicked
+        youtubeWatchButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const youtubeId = this.getAttribute('data-youtube-id');
+                playYouTubeVideo(youtubeId);
+            });
+        });
+        
+        function playYouTubeVideo(youtubeId) {
+            if (youtubePlayer) {
+                youtubePlayer.loadVideoById(youtubeId);
+                youtubeModal.show();
+            } else {
+                // Fallback: open YouTube in new tab
+                window.open(`https://www.youtube.com/watch?v=${youtubeId}`, '_blank');
+            }
+        }
+        
+        // Reset YouTube player when modal is closed
+        document.getElementById('youtubeModal').addEventListener('hidden.bs.modal', function() {
+            if (youtubePlayer && youtubePlayer.stopVideo) {
+                youtubePlayer.stopVideo();
+            }
+        });
+        
+        // Regular video play functionality
+        const videoPlayIcons = document.querySelectorAll('.play-icon[data-video]');
+        const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+        const modalVideo = document.getElementById('modalVideo');
+        
+        videoPlayIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const videoUrl = this.getAttribute('data-video');
+                modalVideo.src = videoUrl;
+                videoModal.show();
+            });
+        });
+        
+        // Reset video when modal is closed
+        document.getElementById('videoModal').addEventListener('hidden.bs.modal', function() {
+            modalVideo.pause();
+            modalVideo.src = '';
+        });
+        
+        // Download simulation with progress
+        const downloadButtons = document.querySelectorAll('.download-btn');
+        
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const fileUrl = this.getAttribute('data-file');
+                const resourceName = this.getAttribute('data-resource');
+                const resourceId = this.getAttribute('data-id');
+                const progressElement = document.getElementById(`progress-${resourceId}`);
+                
+                // Show progress
+                progressElement.style.display = 'flex';
+                let progressCircle = progressElement.querySelector('circle');
+                let progressText = progressElement.querySelector('span');
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 2; // increment progress
+                    if (progress > 100) progress = 100;
+                    const circumference = 2 * Math.PI * 18; // r = 18
+                    const offset = circumference - (progress / 100) * circumference;
+                    progressCircle.style.strokeDashoffset = offset;
+                    progressText.textContent = `Downloading... ${progress}%`;
+
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        progressText.textContent = 'Download complete!';
+                        setTimeout(() => {
+                            progressElement.style.display = 'none';
+                            // Optional: trigger actual file download
+                            const a = document.createElement('a');
+                            a.href = fileUrl;
+                            a.download = resourceName;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        }, 1000);
+                    }
+                }, 50);
+            });
+        });
+    });
+</script>
+{% endblock %}
