@@ -1,0 +1,753 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About EduRise - Transforming Education in Uganda Through Digital Innovation{% endblock %}
+
+{% block meta_description %}Learn about EduRise's mission to democratize quality education in Uganda. Discover our story, team, values, and commitment to bridging the educational divide through technology.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* CSS Variables for consistent theming */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+        --primary-light: rgba(67, 97, 238, 0.08);
+        --secondary-light: rgba(114, 9, 183, 0.08);
+        --text-dark: #2d3748;
+        --text-light: #718096;
+        --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Enhanced Hero Section */
+    .about-hero {
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+        position: relative;
+        overflow: hidden;
+        padding: 6rem 0 4rem;
+    }
+
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(67, 97, 238, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(114, 9, 183, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(67, 97, 238, 0.05) 0%, transparent 50%);
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Typography Scale */
+    .display-4 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .display-4 {
+            font-size: 2.5rem;
+            line-height: 1.3;
+        }
+    }
+
+    /* Statistics Section */
+    .stat-card {
+        text-align: center;
+        padding: 2rem 1rem;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-medium);
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .stat-label {
+        color: var(--text-light);
+        font-weight: 500;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        line-height: 1.4;
+    }
+
+    /* Team Section - Fixed */
+    .team-section {
+        padding: 5rem 0;
+    }
+
+    .team-card {
+        background: white;
+        border-radius: 20px;
+        overflow: visible;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: none;
+        box-shadow: var(--shadow-light);
+        margin-bottom: 2rem;
+        height: auto;
+        min-height: 400px;
+    }
+
+    .team-card:hover {
+        transform: translateY(-12px);
+        box-shadow: var(--shadow-large);
+    }
+
+    .team-image-container {
+        position: relative;
+        padding: 2rem 2rem 0;
+        text-align: center;
+    }
+
+    .team-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: var(--shadow-medium);
+        margin: 0 auto;
+        display: block;
+    }
+
+    .team-card .card-body {
+        padding: 1.5rem 2rem 2rem;
+        text-align: center;
+        flex: 1;
+    }
+
+    .team-card .card-title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+        font-size: 1.25rem;
+        line-height: 1.3;
+    }
+
+    .team-role {
+        color: #4361ee;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .team-card .card-text {
+        color: var(--text-light);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    /* Values Grid */
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .value-card {
+        background: white;
+        padding: 2.5rem 2rem;
+        border-radius: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #e2e8f0;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .value-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-large);
+        border-color: transparent;
+    }
+
+    .value-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        background: var(--primary-gradient);
+        color: white;
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .value-card:hover .value-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .value-card h4 {
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .value-card p {
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Partners Section */
+    .partners-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 2rem;
+        align-items: center;
+        margin-top: 3rem;
+    }
+
+    .partner-logo {
+        filter: grayscale(100%);
+        opacity: 0.7;
+        transition: all 0.3s ease;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow-light);
+        max-width: 100%;
+        height: auto;
+    }
+
+    .partner-logo:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+        transform: scale(1.05);
+        box-shadow: var(--shadow-medium);
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: var(--primary-gradient);
+        position: relative;
+        overflow: hidden;
+        padding: 5rem 0;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+
+    .cta-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Section Spacing */
+    .section-py {
+        padding: 5rem 0;
+    }
+
+    .section-py-lg {
+        padding: 6rem 0;
+    }
+
+    /* Text Content Improvements */
+    .content-text {
+        line-height: 1.7;
+        color: var(--text-dark);
+    }
+
+    .content-text p {
+        margin-bottom: 1.5rem;
+    }
+
+    .content-text .lead {
+        font-size: 1.25rem;
+        line-height: 1.6;
+        font-weight: 400;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .section-py {
+            padding: 3rem 0;
+        }
+        
+        .section-py-lg {
+            padding: 4rem 0;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+        }
+        
+        .values-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .partners-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .team-card {
+            min-height: auto;
+            margin-bottom: 2rem;
+        }
+
+        .team-image {
+            width: 120px;
+            height: 120px;
+        }
+
+        .team-card .card-body {
+            padding: 1.5rem 1.5rem 2rem;
+        }
+
+        .display-4 {
+            font-size: 2.2rem;
+        }
+
+        .content-text .lead {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .team-image {
+            width: 100px;
+            height: 100px;
+        }
+
+        .team-card .card-body {
+            padding: 1rem 1.25rem 1.5rem;
+        }
+
+        .value-card {
+            padding: 2rem 1.5rem;
+            min-height: 250px;
+        }
+
+        .stat-card {
+            padding: 1.5rem 1rem;
+            min-height: 120px;
+        }
+    }
+
+    /* Ensure text doesn't get cut off */
+    .text-preserve {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+    }
+
+    /* Image container to prevent overflow */
+    .img-container {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .img-container img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="about-hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center hero-content">
+                <h1 class="display-4 fw-bold text-dark mb-4 fade-in-up text-preserve">
+                    Transforming Education in Uganda Through Digital Innovation
+                </h1>
+                <p class="lead fs-5 text-muted mb-4 fade-in-up text-preserve" style="animation-delay: 0.2s;">
+                    Empowering the next generation of Ugandan leaders with accessible, quality education
+                </p>
+                <nav aria-label="breadcrumb" class="fade-in-up text-preserve" style="animation-delay: 0.4s;">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item active text-primary" aria-current="page">About Us</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Impact -->
+<section class="section-py">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Our Mission</span>
+                <h2 class="h1 fw-bold mb-4 text-preserve">Democratizing Quality Education Through Technology</h2>
+                <div class="content-text">
+                    <p class="lead text-muted mb-4">
+                        EduRise is committed to bridging the educational divide in Uganda by leveraging digital innovation to make quality learning resources accessible to every student, regardless of their geographical location or socioeconomic background.
+                    </p>
+                    <p class="text-muted mb-5">
+                        Founded in 2022, we recognized the urgent need for scalable educational solutions that address the unique challenges facing Uganda's youth. Our platform combines cutting-edge technology with culturally relevant content to create meaningful learning experiences.
+                    </p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-number" data-count="10000">0</div>
+                            <div class="stat-label text-preserve">Students Empowered</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-number" data-count="250">0</div>
+                            <div class="stat-label text-preserve">Educators Involved</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-number" data-count="20">0</div>
+                            <div class="stat-label text-preserve">Regions Reached</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="position-relative img-container">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1000" 
+                         alt="Ugandan students engaged in digital learning" 
+                         class="img-fluid rounded-3 shadow-lg">
+                    <div class="position-absolute bottom-0 start-0 m-3 m-md-4">
+                        <div class="bg-white rounded-2 p-3 shadow">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary rounded-circle p-2 me-3">
+                                    <i class="fas fa-graduation-cap text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 text-preserve">Digital Literacy</h6>
+                                    <small class="text-muted text-preserve">Empowering through technology</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Our Leadership</span>
+                <h2 class="h1 fw-bold mb-3 text-preserve">Meet Our Visionary Team</h2>
+                <p class="lead text-muted text-preserve">Dedicated professionals driving educational transformation across Uganda</p>
+            </div>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            <div class="col-xl-4 col-md-6">
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="https://sangaben.onrender.com/sanga.jpg" 
+                             alt="Ben Sanga - Founder & CEO" 
+                             class="team-image">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-preserve">Ben Sanga</h5>
+                        <div class="team-role text-preserve">Founder & Chief Executive Officer</div>
+                        <p class="card-text text-preserve">
+                            Education technology specialist with over a decade of experience in curriculum development and digital learning solutions. Passionate about creating scalable educational impact.
+                        </p>
+                        <div class="mt-3">
+                            <small class="text-muted text-preserve">
+                                <i class="fas fa-award me-1"></i>
+                                10+ Years Experience
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-md-6">
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" 
+                             alt="Sarah Nakato - CTO" 
+                             class="team-image">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-preserve">Sarah Nakato</h5>
+                        <div class="team-role text-preserve">Chief Technology Officer</div>
+                        <p class="card-text text-preserve">
+                            Technology innovator with expertise in building scalable platforms. Committed to leveraging technology for social impact and educational advancement in East Africa.
+                        </p>
+                        <div class="mt-3">
+                            <small class="text-muted text-preserve">
+                                <i class="fas fa-code me-1"></i>
+                                Full-Stack Development
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-md-6">
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400" 
+                             alt="James Mugisha - Head of Education" 
+                             class="team-image">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-preserve">James Mugisha</h5>
+                        <div class="team-role text-preserve">Head of Education</div>
+                        <p class="card-text text-preserve">
+                            Former secondary school teacher with a Master's in Educational Leadership. Focused on curriculum development and teacher training programs across Uganda.
+                        </p>
+                        <div class="mt-3">
+                            <small class="text-muted text-preserve">
+                                <i class="fas fa-chalkboard-teacher me-1"></i>
+                                Educational Leadership
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="section-py">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Our Values</span>
+                <h2 class="h1 fw-bold mb-3 text-preserve">The Principles That Guide Us</h2>
+                <p class="lead text-muted text-preserve">Core beliefs that shape our approach to educational transformation</p>
+            </div>
+        </div>
+        
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-universal-access"></i>
+                </div>
+                <h4 class="fw-bold mb-3 text-preserve">Accessibility</h4>
+                <p class="text-muted mb-0 text-preserve">
+                    We believe every Ugandan student deserves access to quality education, regardless of their location, background, or economic status.
+                </p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <h4 class="fw-bold mb-3 text-preserve">Excellence</h4>
+                <p class="text-muted mb-0 text-preserve">
+                    We maintain the highest standards in educational content and platform development, ensuring relevance and quality in everything we deliver.
+                </p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h4 class="fw-bold mb-3 text-preserve">Collaboration</h4>
+                <p class="text-muted mb-0 text-preserve">
+                    We work closely with educators, communities, and partners to create sustainable solutions that address real educational challenges.
+                </p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h4 class="fw-bold mb-3 text-preserve">Innovation</h4>
+                <p class="text-muted mb-0 text-preserve">
+                    We continuously explore emerging technologies and pedagogical approaches to enhance learning outcomes and user experience.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Partners Section -->
+<section class="section-py bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Our Network</span>
+                <h2 class="h1 fw-bold mb-3 text-preserve">Trusted by Educational Partners</h2>
+                <p class="lead text-muted text-preserve">Collaborating with leading institutions to amplify our impact</p>
+            </div>
+        </div>
+        
+        <div class="partners-grid">
+            <img src="https://via.placeholder.com/200x80/4361ee/ffffff?text=Ministry+of+Education" alt="Ministry of Education and Sports" class="partner-logo">
+            <img src="https://via.placeholder.com/200x80/7209b7/ffffff?text=UNICEF" alt="UNICEF Uganda" class="partner-logo">
+            <img src="https://via.placeholder.com/200x80/4361ee/ffffff?text=Makerere+University" alt="Makerere University" class="partner-logo">
+            <img src="https://via.placeholder.com/200x80/7209b7/ffffff?text=BRAC+Uganda" alt="BRAC Uganda" class="partner-logo">
+            <img src="https://via.placeholder.com/200x80/4361ee/ffffff?text=Teach+For+Uganda" alt="Teach For Uganda" class="partner-logo">
+            <img src="https://via.placeholder.com/200x80/7209b7/ffffff?text=STIR+Education" alt="STIR Education" class="partner-logo">
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-4 mb-lg-0 cta-content">
+                <h2 class="h1 fw-bold text-white mb-3 text-preserve">Join the Educational Revolution</h2>
+                <p class="lead text-white-50 mb-0 text-preserve">
+                    Be part of our mission to transform education in Uganda. Whether you're an educator, developer, or supporter, there's a place for you in our journey.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end cta-content">
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg px-4 fw-semibold text-preserve">
+                        Join Our Team
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg px-4 text-preserve">
+                        Partner With Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animated counters
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Animate statistics
+                    if (entry.target.classList.contains('stat-number')) {
+                        const target = parseInt(entry.target.getAttribute('data-count'));
+                        animateValue(entry.target, 0, target, 2000);
+                    }
+                    
+                    // Add animation class
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements that need animation
+        document.querySelectorAll('.stat-number, .team-card, .value-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth hover effects
+        document.querySelectorAll('.team-card, .value-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = this.classList.contains('team-card') 
+                    ? 'translateY(-12px) scale(1.02)' 
+                    : 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Ensure images load properly
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+            });
+            
+            img.addEventListener('error', function() {
+                console.log('Image failed to load:', this.src);
+                // You could set a fallback image here
+            });
+        });
+    });
+</script>
+{% endblock %}

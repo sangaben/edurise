@@ -1,0 +1,761 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Educational Resources | EduRise{% endblock %}
+
+{% block meta_description %}Browse our comprehensive library of educational resources for Ugandan students and teachers. Find lesson plans, study materials, and teaching aids across all subjects.{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary: #FF6B35;
+        --primary-dark: #E55A2B;
+        --primary-light: #FFE8E0;
+        --secondary: #2D3748;
+        --accent: #F7FAFC;
+        --text-dark: #2D3748;
+        --text-light: #718096;
+        --border-light: #E2E8F0;
+        --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+        --shadow-medium: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-large: 0 10px 15px rgba(0,0,0,0.1);
+    }
+
+    .resources-hero {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 4rem 0 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .resources-hero::before {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,224L80,192C160,160,320,96,480,96C640,96,800,160,960,186.7C1120,213,1280,203,1360,197.3L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+        background-size: cover;
+    }
+
+    .search-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow-large);
+        padding: 2rem;
+        margin-top: -60px;
+        position: relative;
+        z-index: 10;
+        border: 1px solid var(--border-light);
+    }
+
+    .filter-sidebar {
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow-light);
+        padding: 1.5rem;
+        border: 1px solid var(--border-light);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+
+    .filter-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .filter-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .filter-title {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .filter-options {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .filter-option {
+        margin-bottom: 0.75rem;
+    }
+
+    .filter-option label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        transition: color 0.2s;
+    }
+
+    .filter-option label:hover {
+        color: var(--primary);
+    }
+
+    .filter-option input[type="checkbox"] {
+        margin-right: 0.75rem;
+        accent-color: var(--primary);
+    }
+
+    .resource-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .resource-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-light);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-light);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .resource-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-large);
+        border-color: var(--primary-light);
+    }
+
+    .resource-header {
+        position: relative;
+        height: 160px;
+        overflow: hidden;
+    }
+
+    .resource-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .resource-card:hover .resource-image {
+        transform: scale(1.05);
+    }
+
+    .resource-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--primary);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .resource-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .resource-title {
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        line-height: 1.4;
+    }
+
+    .resource-description {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .resource-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-light);
+        font-size: 0.85rem;
+    }
+
+    .resource-author {
+        display: flex;
+        align-items: center;
+        color: var(--text-light);
+    }
+
+    .author-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        object-fit: cover;
+        border: 2px solid var(--primary-light);
+    }
+
+    .resource-stats {
+        display: flex;
+        gap: 1rem;
+        color: var(--text-light);
+    }
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .stat i {
+        color: var(--primary);
+    }
+
+    .resource-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .btn-download {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        flex: 1;
+    }
+
+    .btn-download:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+
+    .btn-preview {
+        background: var(--accent);
+        color: var(--text-dark);
+        border: 1px solid var(--border-light);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .btn-preview:hover {
+        background: white;
+        border-color: var(--primary);
+    }
+
+    .pagination-container {
+        margin-top: 3rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-link {
+        color: var(--primary);
+        border: 1px solid var(--border-light);
+        padding: 0.5rem 1rem;
+        margin: 0 0.2rem;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .page-link:hover {
+        background: var(--primary-light);
+        border-color: var(--primary);
+    }
+
+    .page-link.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .results-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .results-count {
+        color: var(--text-light);
+        font-size: 1rem;
+    }
+
+    .sort-dropdown .btn {
+        border: 1px solid var(--border-light);
+        color: var(--text-dark);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        grid-column: 1 / -1;
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        color: var(--border-light);
+        margin-bottom: 1rem;
+    }
+
+    .category-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .category-filter {
+        background: white;
+        border: 1px solid var(--border-light);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .category-filter:hover, .category-filter.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+        .resource-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .search-container {
+            margin-top: -40px;
+            padding: 1.5rem;
+        }
+        
+        .results-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Resources Hero Section -->
+<section class="resources-hero">
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold mb-3">Educational Resource Library</h1>
+                <p class="lead mb-0">Discover thousands of high-quality learning materials curated for Ugandan students and educators</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search & Filter Section -->
+<section class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="search-container">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" placeholder="Search lesson plans, worksheets, presentations, or topics..." id="resourceSearch">
+                    <button class="btn btn-primary px-4" type="button" id="searchButton">
+                        <i class="fas fa-search me-2"></i> Search
+                    </button>
+                </div>
+                
+                <!-- Quick Category Filters -->
+                <div class="category-filters mt-3">
+                    <div class="category-filter active" data-category="all">All Resources</div>
+                    <div class="category-filter" data-category="mathematics">Mathematics</div>
+                    <div class="category-filter" data-category="sciences">Sciences</div>
+                    <div class="category-filter" data-category="languages">Languages</div>
+                    <div class="category-filter" data-category="technology">Technology</div>
+                    <div class="category-filter" data-category="business">Business</div>
+                    <div class="category-filter" data-category="arts">Arts & Humanities</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3">
+            <div class="filter-sidebar">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Filters</h5>
+                    <button class="btn btn-sm btn-link text-primary p-0" id="resetFilters">Reset All</button>
+                </div>
+                
+                <div class="filter-section">
+                    <h6 class="filter-title">Subject Area</h6>
+                    <ul class="filter-options">
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="subject" value="mathematics"> Mathematics
+                                <span class="badge bg-primary-light text-primary ms-2">248</span>
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="subject" value="sciences"> Sciences
+                                <span class="badge bg-primary-light text-primary ms-2">187</span>
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="subject" value="languages"> Languages
+                                <span class="badge bg-primary-light text-primary ms-2">156</span>
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="subject" value="technology"> Technology
+                                <span class="badge bg-primary-light text-primary ms-2">134</span>
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="subject" value="business"> Business Studies
+                                <span class="badge bg-primary-light text-primary ms-2">98</span>
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="subject" value="arts"> Arts & Humanities
+                                <span class="badge bg-primary-light text-primary ms-2">76</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="filter-section">
+                    <h6 class="filter-title">Education Level</h6>
+                    <ul class="filter-options">
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="level" value="primary"> Primary (P1-P7)
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="level" value="lower-secondary"> Lower Secondary (S1-S4)
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="level" value="upper-secondary"> Upper Secondary (S5-S6)
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="level" value="tertiary"> Tertiary/University
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="filter-section">
+                    <h6 class="filter-title">Resource Type</h6>
+                    <ul class="filter-options">
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="type" value="lesson-plan"> Lesson Plans
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="type" value="worksheet"> Worksheets
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="type" value="presentation"> Presentations
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="type" value="video"> Video Lessons
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="type" value="assessment"> Assessments
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="filter-section">
+                    <h6 class="filter-title">File Format</h6>
+                    <ul class="filter-options">
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="format" value="pdf"> PDF Documents
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="format" value="doc"> Word Documents
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="format" value="ppt"> PowerPoint
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <label>
+                                <input type="checkbox" name="format" value="video"> Video Files
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <button class="btn btn-primary w-100 mt-2" id="applyFilters">
+                    <i class="fas fa-filter me-2"></i> Apply Filters
+                </button>
+            </div>
+        </div>
+        
+        <!-- Resources Grid -->
+        <div class="col-lg-9">
+            <div class="results-header">
+                <div>
+                    <h3 class="mb-1">Educational Resources</h3>
+                    <p class="results-count mb-0">Showing 1-12 of 899 resources</p>
+                </div>
+                <div class="sort-dropdown">
+                    <select class="form-select" id="sortSelect">
+                        <option value="newest">Newest First</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="downloads">Most Downloads</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="title">Alphabetical</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="resource-grid">
+                {% for resource in resources %}
+                <div class="resource-card" data-category="{{ resource.category }}" data-level="{{ resource.level }}">
+                    <div class="resource-header">
+                        <img src="{{ resource.thumbnail_url }}" alt="{{ resource.title }}" class="resource-image">
+                        <span class="resource-badge">{{ resource.get_category_display }}</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">{{ resource.title }}</h3>
+                        <p class="resource-description">{{ resource.description|truncatewords:20 }}</p>
+                        
+                        <div class="resource-meta">
+                            <div class="resource-author">
+                                <img src="{{ resource.author.profile_picture_url }}" alt="{{ resource.author.get_full_name }}" class="author-avatar">
+                                <span>{{ resource.author.get_full_name }}</span>
+                            </div>
+                            <div class="resource-stats">
+                                <div class="stat">
+                                    <i class="fas fa-download"></i>
+                                    <span>{{ resource.download_count }}</span>
+                                </div>
+                                <div class="stat">
+                                    <i class="fas fa-star"></i>
+                                    <span>{{ resource.rating }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-actions">
+                            <a href="{{ resource.file.url }}" class="btn-download" download>
+                                <i class="fas fa-download me-1"></i> Download
+                            </a>
+                            <button class="btn-preview" data-resource-id="{{ resource.id }}">
+                                <i class="fas fa-eye me-1"></i> Preview
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h4>No resources found</h4>
+                    <p class="text-muted">Try adjusting your search criteria or browse different categories.</p>
+                    <a href="{% url 'upload' %}" class="btn btn-primary mt-2">
+                        <i class="fas fa-upload me-2"></i>Be the first to upload a resource
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <nav aria-label="Resource pagination">
+                    <div class="pagination">
+                        <a class="page-link" href="#">Previous</a>
+                        <a class="page-link active" href="#">1</a>
+                        <a class="page-link" href="#">2</a>
+                        <a class="page-link" href="#">3</a>
+                        <a class="page-link" href="#">4</a>
+                        <a class="page-link" href="#">5</a>
+                        <a class="page-link" href="#">Next</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5" style="background: linear-gradient(135deg, var(--primary-light) 0%, #fff 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="mb-3">Contribute to Uganda's Education</h2>
+                <p class="lead mb-0">Share your teaching materials and help build Africa's largest educational resource library.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                {% if user.is_authenticated and user.profile.role == 'teacher' and user.profile.is_verified %}
+                <a href="{% url 'upload' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-upload me-2"></i>Upload Resources
+                </a>
+                {% else %}
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>Join as Educator
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchInput = document.getElementById('resourceSearch');
+        const searchButton = document.getElementById('searchButton');
+        
+        function performSearch(query) {
+            console.log('Searching for:', query);
+            // AJAX call to search endpoint would go here
+            filterResources();
+        }
+        
+        searchButton.addEventListener('click', () => performSearch(searchInput.value));
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch(searchInput.value);
+        });
+        
+        // Category filters
+        const categoryFilters = document.querySelectorAll('.category-filter');
+        categoryFilters.forEach(filter => {
+            filter.addEventListener('click', function() {
+                categoryFilters.forEach(f => f.classList.remove('active'));
+                this.classList.add('active');
+                filterResources();
+            });
+        });
+        
+        // Filter functionality
+        const filterCheckboxes = document.querySelectorAll('.filter-option input');
+        const resetButton = document.getElementById('resetFilters');
+        const applyButton = document.getElementById('applyFilters');
+        
+        resetButton.addEventListener('click', function() {
+            filterCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            filterResources();
+        });
+        
+        applyButton.addEventListener('click', filterResources);
+        
+        // Sort functionality
+        const sortSelect = document.getElementById('sortSelect');
+        sortSelect.addEventListener('change', filterResources);
+        
+        // Resource filtering function
+        function filterResources() {
+            const activeCategory = document.querySelector('.category-filter.active').dataset.category;
+            const selectedSubjects = Array.from(document.querySelectorAll('input[name="subject"]:checked')).map(cb => cb.value);
+            const selectedLevels = Array.from(document.querySelectorAll('input[name="level"]:checked')).map(cb => cb.value);
+            const selectedTypes = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(cb => cb.value);
+            const selectedFormats = Array.from(document.querySelectorAll('input[name="format"]:checked')).map(cb => cb.value);
+            const sortBy = sortSelect.value;
+            
+            console.log('Filtering with:', {
+                activeCategory,
+                selectedSubjects,
+                selectedLevels,
+                selectedTypes,
+                selectedFormats,
+                sortBy
+            });
+            
+            // In a real application, this would make an AJAX call to filter resources
+            // For now, we'll just show a loading state
+            const resourceGrid = document.querySelector('.resource-grid');
+            resourceGrid.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                resourceGrid.style.opacity = '1';
+            }, 300);
+        }
+        
+        // Preview functionality
+        const previewButtons = document.querySelectorAll('.btn-preview');
+        previewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const resourceId = this.dataset.resourceId;
+                // Open preview modal or redirect to preview page
+                alert(`Preview resource ${resourceId} - This would open a preview modal`);
+            });
+        });
+        
+        // Download tracking
+        const downloadButtons = document.querySelectorAll('.btn-download');
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const resourceId = this.closest('.resource-card').querySelector('.btn-preview').dataset.resourceId;
+                console.log(`Downloading resource ${resourceId}`);
+                // Track download in analytics
+            });
+        });
+    });
+</script>
+{% endblock %}

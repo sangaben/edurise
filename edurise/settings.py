@@ -33,13 +33,18 @@ ALLOWED_HOSTS = ['edurise.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'core',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'core',
+    'accounts',
+    'courses', 
+    'resources',
+    'search',
 ]
 
 MIDDLEWARE = [
@@ -54,11 +59,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'edurise.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',  # ← Add this line
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,7 +75,6 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'edurise.wsgi.application'
 
 

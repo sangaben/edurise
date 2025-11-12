@@ -1,0 +1,449 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - EduRise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    .login-card {
+        background: var(--light);
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 420px;
+        border-top: 4px solid var(--primary);
+        transition: var(--transition);
+    }
+    
+    .login-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+    }
+    
+    .login-title {
+        color: var(--secondary);
+        font-weight: 700;
+        font-size: 1.8rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-subtitle {
+        color: var(--dark);
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+        opacity: 0.8;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        color: var(--secondary);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid var(--gray);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: var(--transition);
+        background: var(--light);
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+    }
+    
+    .login-btn {
+        width: 100%;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 0.5rem;
+    }
+    
+    .login-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+    }
+    
+    .login-btn:active {
+        transform: translateY(0);
+    }
+    
+    .error-message {
+        background: rgba(244, 67, 54, 0.1);
+        border: 1px solid rgba(244, 67, 54, 0.3);
+        color: #d32f2f;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .register-link {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--gray-light);
+    }
+    
+    .register-link a {
+        color: var(--primary);
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+    
+    .register-link a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+    
+    .password-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--dark);
+        cursor: pointer;
+        opacity: 0.6;
+        transition: var(--transition);
+    }
+    
+    .password-toggle:hover {
+        opacity: 1;
+    }
+    
+    .password-container {
+        position: relative;
+    }
+    
+    /* Social Login Options */
+    .social-login {
+        margin: 1.5rem 0;
+        text-align: center;
+    }
+    
+    .social-divider {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+    }
+    
+    .social-divider::before,
+    .social-divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid var(--gray);
+    }
+    
+    .social-divider span {
+        padding: 0 1rem;
+        color: var(--dark);
+        font-size: 0.9rem;
+        opacity: 0.7;
+    }
+    
+    .social-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .social-btn {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid var(--gray);
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+    }
+    
+    .social-btn.google {
+        color: #DB4437;
+    }
+    
+    .social-btn.facebook {
+        color: #4267B2;
+    }
+    
+    .social-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Remember me & Forgot password */
+    .login-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--dark);
+    }
+    
+    .remember-me input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--primary);
+    }
+    
+    .forgot-password {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+    
+    .forgot-password:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .login-container {
+            padding: 1rem;
+        }
+        
+        .login-card {
+            padding: 2rem 1.5rem;
+            margin: 1rem;
+        }
+        
+        .login-title {
+            font-size: 1.6rem;
+        }
+        
+        .social-buttons {
+            flex-direction: column;
+        }
+        
+        .login-options {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .login-card {
+            padding: 1.5rem;
+        }
+        
+        .login-title {
+            font-size: 1.4rem;
+        }
+        
+        .form-input {
+            padding: 10px 14px;
+        }
+        
+        .login-btn {
+            padding: 12px;
+        }
+    }
+    
+    /* Loading state */
+    .login-btn.loading {
+        position: relative;
+        color: transparent;
+    }
+    
+    .login-btn.loading::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin-left: -10px;
+        margin-top: -10px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <h1 class="login-title">Welcome Back</h1>
+        <p class="login-subtitle">Sign in to your EduRise account</p>
+        
+        {% if form.errors %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            Your username and password didn't match. Please try again.
+        </div>
+        {% endif %}
+        
+        <form method="post" id="loginForm">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username" class="form-label">
+                    <i class="fas fa-user me-2"></i>Username or Email
+                </label>
+                <input type="text" name="username" id="id_username" class="form-input" 
+                       placeholder="Enter your username or email" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password" class="form-label">
+                    <i class="fas fa-lock me-2"></i>Password
+                </label>
+                <div class="password-container">
+                    <input type="password" name="password" id="id_password" class="form-input" 
+                           placeholder="Enter your password" required>
+                    <button type="button" class="password-toggle" id="passwordToggle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="login-options">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember_me"> Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="login-btn" id="loginButton">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </button>
+        </form>
+        
+        <!-- Social Login Options -->
+        <div class="social-login">
+            <div class="social-divider">
+                <span>Or continue with</span>
+            </div>
+            <div class="social-buttons">
+                <button type="button" class="social-btn google">
+                    <i class="fab fa-google me-2"></i>Google
+                </button>
+                <button type="button" class="social-btn facebook">
+                    <i class="fab fa-facebook-f me-2"></i>Facebook
+                </button>
+            </div>
+        </div>
+        
+        <div class="register-link">
+            <p>Don't have an account? 
+                <a href="{% url 'register' %}">Create account here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password toggle functionality
+        const passwordToggle = document.getElementById('passwordToggle');
+        const passwordInput = document.getElementById('id_password');
+        
+        if (passwordToggle && passwordInput) {
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // Toggle eye icon
+                const icon = this.querySelector('i');
+                if (type === 'text') {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        }
+        
+        // Form submission loading state
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
+        
+        if (loginForm && loginButton) {
+            loginForm.addEventListener('submit', function() {
+                loginButton.classList.add('loading');
+                loginButton.disabled = true;
+            });
+        }
+        
+        // Auto-focus on username field
+        const usernameInput = document.getElementById('id_username');
+        if (usernameInput) {
+            usernameInput.focus();
+        }
+        
+        // Add input validation styling
+        const formInputs = document.querySelectorAll('.form-input');
+        formInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.add('has-value');
+                } else {
+                    this.classList.remove('has-value');
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                } else {
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

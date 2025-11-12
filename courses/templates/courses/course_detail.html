@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}EduRise | {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'courses' %}" style="color: #ff9800; text-decoration: none;">Courses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color: #666;">{{ course.title }}</li>
+                </ol>
+            </nav>
+            
+            <!-- Course Card -->
+            <div class="card shadow-sm border-0">
+                <img src="{% if course.image %}{{ course.image.url }}{% else %}https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80{% endif %}" 
+                     class="card-img-top" alt="{{ course.title }}" style="height: 300px; object-fit: cover;">
+                
+                <div class="card-body p-4">
+                    <!-- Course Badge -->
+                    <span class="badge" style="background-color: #ff9800; color: white; font-size: 0.8rem; padding: 6px 12px;">
+                        {{ course.level }}
+                    </span>
+                    
+                    <!-- Course Title -->
+                    <h1 class="card-title mt-3 mb-3" style="color: #333; font-weight: 600; font-size: 2rem;">
+                        {{ course.title }}
+                    </h1>
+                    
+                    <!-- Course Description -->
+                    <p class="card-text text-muted mb-4" style="font-size: 1.1rem; line-height: 1.6;">
+                        {{ course.description }}
+                    </p>
+                    
+                    <!-- Course Details -->
+                    <div class="row mt-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="width: 40px; height: 40px; background-color: #fff3e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fas fa-user" style="color: #ff9800;"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: #333;">Instructor:</strong><br>
+                                    <span style="color: #666;">{{ course.instructor.name }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="width: 40px; height: 40px; background-color: #fff3e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fas fa-tag" style="color: #ff9800;"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: #333;">Category:</strong><br>
+                                    <span style="color: #666;">{{ course.category.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="width: 40px; height: 40px; background-color: #fff3e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fas fa-clock" style="color: #ff9800;"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: #333;">Duration:</strong><br>
+                                    <span style="color: #666;">{{ course.duration }} hours</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="width: 40px; height: 40px; background-color: #fff3e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fas fa-layer-group" style="color: #ff9800;"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: #333;">Modules:</strong><br>
+                                    <span style="color: #666;">{{ course.modules_count }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar (if enrolled) -->
+                    {% if user.is_authenticated and user in course.enrolled_students.all %}
+                    <div class="progress mb-4" style="height: 8px; background-color: #e0e0e0; border-radius: 4px;">
+                        <div class="progress-bar" style="background-color: #ff9800; width: {{ course.progress }}%; border-radius: 4px;"></div>
+                    </div>
+                    <p class="text-muted mb-4" style="font-size: 0.9rem;">
+                        Your progress: {{ course.progress }}%
+                    </p>
+                    {% endif %}
+                    
+                    <!-- Action Buttons -->
+                    <div class="mt-4 d-flex gap-3 flex-wrap">
+                        {% if user.is_authenticated %}
+                            {% if user in course.enrolled_students.all %}
+                                <a href="#" class="btn" style="background-color: #4CAF50; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: 600; border: none;">
+                                    <i class="fas fa-play-circle me-2"></i>Continue Learning
+                                </a>
+                            {% else %}
+                                <a href="{% url 'enroll_course' course.id %}" class="btn" style="background-color: #ff9800; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: 600; border: none;">
+                                    <i class="fas fa-shopping-cart me-2"></i>Enroll Now
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}?next={% url 'course_detail' course.slug %}" class="btn" style="background-color: #ff9800; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: 600; border: none;">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login to Enroll
+                            </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'courses' %}" class="btn" style="background-color: #f1f1f1; color: #333; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: 600; border: 1px solid #ddd;">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Courses
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Course Features -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="text-center p-4" style="background-color: #fff3e0; border-radius: 8px; height: 100%;">
+                        <i class="fas fa-certificate fa-2x mb-3" style="color: #ff9800;"></i>
+                        <h5 style="color: #333; font-weight: 600;">Certificate</h5>
+                        <p class="text-muted">Earn a certificate upon completion</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="text-center p-4" style="background-color: #fff3e0; border-radius: 8px; height: 100%;">
+                        <i class="fas fa-infinity fa-2x mb-3" style="color: #ff9800;"></i>
+                        <h5 style="color: #333; font-weight: 600;">Lifetime Access</h5>
+                        <p class="text-muted">Access course materials forever</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="text-center p-4" style="background-color: #fff3e0; border-radius: 8px; height: 100%;">
+                        <i class="fas fa-mobile-alt fa-2x mb-3" style="color: #ff9800;"></i>
+                        <h5 style="color: #333; font-weight: 600;">Mobile Friendly</h5>
+                        <p class="text-muted">Learn on any device, anytime</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    .card {
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #e68900 !important;
+    }
+    
+    .progress-bar {
+        transition: width 0.5s ease-in-out;
+    }
+</style>
+{% endblock %}
